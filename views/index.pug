@@ -1,0 +1,43 @@
+extends layout.pug 
+
+block content
+  //- a paragraph bootstrap
+  p 
+    | Get dữ liệu từ 
+    a(href='https://phimgii.net') phimgii.net
+    | !{' '}và 
+    a(href='https://ephimmoi.net') ephimmoi.net
+  
+
+  form(x-data="{ shiftPressed: false }" @submit.prevent='getData()')
+    .mb-3
+      label.form-label(for='urlInput') URL
+      //- helper text
+      input.form-control(type='text' name='url' id='urlInput' aria-describedby='urlHelp' placeholder='Enter URL')
+      button.btn.btn-primary.mt-1(type='submit') Submit
+
+  .mt-3
+    //- Data fetching
+    #tree
+
+block scripts 
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jsonview/1.2.3/jquery.jsonview.min.js", integrity="sha512-ff/E/8AEnLDXnTCyIa+l80evPRNH8q5XnPGY/NgBL645jzHL1ksmXonVMDt7e5D34Y4DTOv+P+9Rmo9jBSSyIg==", crossorigin="anonymous", referrerpolicy="no-referrer")
+  link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jsonview/1.2.3/jquery.jsonview.min.css", integrity="sha512-aM9sVC1lVWwuuq38iKbFdk04uGgRyr7ERRnO990jReifKRrYGLugrpLCj27Bfejv6YnAFW2iN3sm6x/jbW7YBg==", crossorigin="anonymous", referrerpolicy="no-referrer")
+
+  script.
+    function getData() {
+      var url = $('#urlInput').val();
+
+      $.ajax({
+        url: '/get-data',
+        type: 'GET',
+        data: {
+          url: url
+        },
+        success: function(data) {
+          
+          $("#tree").JSONView(data, { collapsed: false });
+        }
+      });
+    }
+
